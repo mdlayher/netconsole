@@ -69,3 +69,31 @@ func TestParseLog(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkParseLog(b *testing.B) {
+	tests := []struct {
+		name string
+		s    string
+	}{
+		{
+			name: "invalid",
+			s:    "foo",
+		},
+		{
+			name: "short",
+			s:    "[    0.097798] x86: Booted up 1 node, 4 CPUs",
+		},
+		{
+			name: "long",
+			s:    "[   82.742346] systemd[1]: systemd 229 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ -LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN)",
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_, _ = netconsole.ParseLog(tt.s)
+			}
+		})
+	}
+}
