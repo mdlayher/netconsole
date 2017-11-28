@@ -4,6 +4,7 @@ import (
 	"context"
 	"net"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -70,6 +71,11 @@ func (s *Server) serve(ctx context.Context, pc net.PacketConn) error {
 	for {
 		n, addr, err := pc.ReadFrom(b)
 		if err != nil {
+			// TODO(mdlayher): this is a hack. See: https://github.com/golang/go/issues/4373.
+			if strings.Contains(err.Error(), "use of closed network connection") {
+				return nil
+			}
+
 			return err
 		}
 

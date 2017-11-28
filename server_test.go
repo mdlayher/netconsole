@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -74,11 +73,6 @@ func testServer(t *testing.T, bufs [][]byte) []Log {
 
 		err = s.serve(ctx, pc)
 		if err != nil {
-			// Don't panic when shutting down.
-			if strings.Contains(err.Error(), "use of closed") {
-				return
-			}
-
 			panic(fmt.Sprintf("failed to serve: %v", err))
 		}
 	}()
