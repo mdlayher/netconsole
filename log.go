@@ -22,10 +22,10 @@ type Log struct {
 var logRe = regexp.MustCompile(`\[\s*(\d+.\d+)\]\s(.+)`)
 
 // ParseLog parses a log line in the netconsole format.
-func ParseLog(s string) (*Log, error) {
+func ParseLog(s string) (Log, error) {
 	groups := logRe.FindStringSubmatch(s)
 	if len(groups) != 3 {
-		return nil, fmt.Errorf("malformed netconsole log: %q", s)
+		return Log{}, fmt.Errorf("malformed netconsole log: %q", s)
 	}
 
 	// If the regex matches:
@@ -35,10 +35,10 @@ func ParseLog(s string) (*Log, error) {
 
 	elapsed, err := time.ParseDuration(groups[1] + "s")
 	if err != nil {
-		return nil, err
+		return Log{}, err
 	}
 
-	l := &Log{
+	l := Log{
 		Elapsed: elapsed,
 		Message: groups[2],
 	}

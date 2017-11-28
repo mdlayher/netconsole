@@ -24,7 +24,7 @@ func TestServerListenAndServe(t *testing.T) {
 
 	got := testServer(t, bufs)
 
-	want := []*Log{
+	want := []Log{
 		{
 			Elapsed: 22*time.Second + 671488*time.Microsecond,
 			Message: "raid6: using algorithm avx2x4 gen() 21138 MB/s",
@@ -40,7 +40,7 @@ func TestServerListenAndServe(t *testing.T) {
 	}
 }
 
-func testServer(t *testing.T, bufs [][]byte) []*Log {
+func testServer(t *testing.T, bufs [][]byte) []Log {
 	pc, err := net.ListenPacket("udp", "localhost:0")
 	if err != nil {
 		t.Fatalf("failed to start server: %v", err)
@@ -52,9 +52,9 @@ func testServer(t *testing.T, bufs [][]byte) []*Log {
 
 	// Gather valid logs into the slice, but decrement the waitgroup on
 	// all messages so that we can ensure deterministic test output.
-	var logs []*Log
+	var logs []Log
 	s := &Server{
-		handle: func(_ net.Addr, l *Log) {
+		handle: func(_ net.Addr, l Log) {
 			defer logsWG.Done()
 			logs = append(logs, l)
 		},

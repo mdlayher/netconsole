@@ -12,7 +12,7 @@ func TestParseLog(t *testing.T) {
 	tests := []struct {
 		name string
 		s    string
-		ll   *netconsole.Log
+		ll   netconsole.Log
 		ok   bool
 	}{
 		{
@@ -38,7 +38,7 @@ func TestParseLog(t *testing.T) {
 		{
 			name: "OK",
 			s:    "[   22.671488] raid6: using algorithm avx2x4 gen() 21138 MB/s",
-			ll: &netconsole.Log{
+			ll: netconsole.Log{
 				Elapsed: 22*time.Second + 671488*time.Microsecond,
 				Message: "raid6: using algorithm avx2x4 gen() 21138 MB/s",
 			},

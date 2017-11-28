@@ -12,7 +12,7 @@ import (
 type Server struct {
 	network string
 	addr    string
-	handle  func(addr net.Addr, l *Log)
+	handle  func(addr net.Addr, l Log)
 
 	// TODO(mdlayher): expose drop as a tunable externally?
 	drop func(addr net.Addr, b []byte)
@@ -26,10 +26,10 @@ type Server struct {
 // Logs are processed in a first-in, first-out fashion.
 //
 // If no handle function is specified, all logs are silently discarded.
-func NewServer(network, addr string, handle func(addr net.Addr, l *Log)) *Server {
+func NewServer(network, addr string, handle func(addr net.Addr, l Log)) *Server {
 	if handle == nil {
 		// By default, do nothing with processed logs.
-		handle = func(_ net.Addr, _ *Log) {}
+		handle = func(_ net.Addr, _ Log) {}
 	}
 
 	return &Server{
